@@ -1,25 +1,28 @@
 import React from 'react';
-import logo from './logo.svg';
 import './App.css';
 
+// GRAPHQL IMPORTS
+import { GET_LAUNCHES } from "./queries";
+import { useQuery } from '@apollo/client';
+
+
 function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    const { loading, error, data } = useQuery(GET_LAUNCHES);
+
+    if (loading) return <p>Loading...</p>;
+
+    if (error) return <p>Error</p>;
+
+    return (
+      <div>
+          <h2>Apollo - SpaceX Missions 🚀</h2>
+
+          {data.launches.map((item: any, index: number) => (
+              <div key={index}>
+                  <h3>{item.mission_name}</h3>
+              </div>
+          ))}
+      </div>
   );
 }
 
